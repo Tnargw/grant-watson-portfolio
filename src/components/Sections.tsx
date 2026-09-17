@@ -1,9 +1,10 @@
 import {
   education,
+  headlineStack,
   howIWork,
   jobs,
   profile,
-  proofPoints,
+  quickFacts,
   skills,
   socials,
 } from '../content/profile';
@@ -11,33 +12,40 @@ import { projects, smallerProjects } from '../content/projects';
 import { CodeBlock } from './CodeBlock';
 import { Diagram } from './Diagrams';
 
-export function Hero() {
+/**
+ * The landing screen. Deliberately short: name, what I do, whether I'm
+ * available, the stack, three facts, and a way to reach me. Anyone who wants
+ * more scrolls, and the arrow at the bottom says so.
+ */
+export function Landing() {
   return (
-    <section className="hero" id="top">
-      <div className="hero__grid" aria-hidden="true" />
+    <section className="landing" id="top">
+      <div className="landing__grid" aria-hidden="true" />
+
       <div className="shell">
-        <div className="hero__inner">
+        <div className="landing__inner">
           <div>
-            <p className="hero__status">
-              <span className="hero__dot" aria-hidden="true" />
-              Available for software engineering roles
+            <p className="landing__status">
+              <span className="landing__dot" aria-hidden="true" />
+              Open to software engineering roles
             </p>
 
             <h1>{profile.name}</h1>
-            <p className="hero__role">{profile.role}</p>
+            <p className="landing__role">{profile.role}</p>
 
-            <p className="hero__lede">{profile.positioning}</p>
-            <p className="hero__secondary">{profile.secondary}</p>
-            <p className="hero__seeking">
-              {profile.seeking} Based in {profile.location}.
-            </p>
+            <p className="landing__intro">{profile.intro}</p>
+            <p className="landing__intro landing__intro--sub">{profile.intro2}</p>
+            <p className="landing__seeking">{profile.seeking}</p>
 
-            <div className="btn-row">
+            <div className="btn-row landing__actions">
               <a className="btn btn--primary" href="#work">
                 See the work
               </a>
+              <a className="btn" href={profile.resumeHref} download>
+                Résumé
+              </a>
               <a className="btn" href={`mailto:${profile.email}`}>
-                Get in touch
+                Email
               </a>
               {socials.map((link) => (
                 <a
@@ -48,14 +56,13 @@ export function Hero() {
                   rel="noopener noreferrer"
                 >
                   {link.label}
-                  <span className="btn__hint">↗</span>
                 </a>
               ))}
             </div>
           </div>
 
           <img
-            className="hero__portrait"
+            className="landing__portrait"
             src={profile.photo}
             alt={profile.name}
             width="176"
@@ -65,47 +72,37 @@ export function Hero() {
           />
         </div>
 
-        <dl className="proof">
-          {proofPoints.map((point) => (
-            <div className="proof__item" key={point.label}>
-              <dt className="proof__value">{point.value}</dt>
-              <dd className="proof__label">{point.label}</dd>
-            </div>
-          ))}
-        </dl>
-      </div>
-    </section>
-  );
-}
+        <div className="landing__facts">
+          <dl>
+            {quickFacts.map((fact) => (
+              <div key={fact.label}>
+                <dt>{fact.label}</dt>
+                <dd>{fact.value}</dd>
+              </div>
+            ))}
+          </dl>
 
-export function Skills() {
-  return (
-    <section className="section" id="skills" aria-labelledby="skills-h">
-      <div className="shell">
-        <div className="section-head">
-          <p className="eyebrow">Stack</p>
-          <h2 id="skills-h">What I work with</h2>
-          <p>
-            Every line names where I actually used it, so any of it can be checked against the
-            projects below.
-          </p>
+          <ul className="tag-row landing__stack" aria-label="Main technologies">
+            {headlineStack.map((tech) => (
+              <li className="tag" key={tech}>
+                {tech}
+              </li>
+            ))}
+          </ul>
         </div>
 
-        <div className="skill-grid">
-          {skills.map((group) => (
-            <div className="skill-col" key={group.group}>
-              <h3>{group.group}</h3>
-              <ul>
-                {group.items.map((item) => (
-                  <li key={item.name}>
-                    <span className="skill-name">{item.name}</span>
-                    <span className="skill-where">{item.where}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
+        <a className="scroll-cue" href="#work">
+          Four projects, and the hard part of each one
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path
+              d="M8 3v10M4 9l4 4 4-4"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </a>
       </div>
     </section>
   );
@@ -119,8 +116,8 @@ export function Work() {
           <p className="eyebrow">Selected work</p>
           <h2 id="work-h">Four things I built</h2>
           <p>
-            What each one was for, what I built, and — for each — the one problem I would most want
-            to be asked about.
+            What each one was for, what I built, and the one problem from each that I would most
+            want to be asked about.
           </p>
         </div>
 
@@ -239,6 +236,36 @@ export function SmallerWork() {
   );
 }
 
+export function Skills() {
+  return (
+    <section className="section" id="skills" aria-labelledby="skills-h">
+      <div className="shell">
+        <div className="section-head">
+          <p className="eyebrow">Stack</p>
+          <h2 id="skills-h">What I work with</h2>
+          <p>Every line says where I actually used it, so you can check it against the projects.</p>
+        </div>
+
+        <div className="skill-grid">
+          {skills.map((group) => (
+            <div className="skill-col" key={group.group}>
+              <h3>{group.group}</h3>
+              <ul>
+                {group.items.map((item) => (
+                  <li key={item.name}>
+                    <span className="skill-name">{item.name}</span>
+                    <span className="skill-where">{item.where}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export function HowIWork() {
   return (
     <section className="section" id="how-i-work" aria-labelledby="how-h">
@@ -246,9 +273,7 @@ export function HowIWork() {
         <div className="section-head">
           <p className="eyebrow">On a team</p>
           <h2 id="how-h">How I work</h2>
-          <p>
-            The part a portfolio usually leaves out: what I am like to actually work alongside.
-          </p>
+          <p>The part a portfolio usually skips. What I am like to work alongside.</p>
         </div>
 
         <div className="practice-list">
@@ -328,10 +353,10 @@ export function Contact() {
     <section className="section" id="contact" aria-labelledby="contact-h">
       <div className="shell">
         <div className="contact">
-          <h2 id="contact-h">Let’s talk</h2>
+          <h2 id="contact-h">Get in touch</h2>
           <p>
-            If any of the work above raised a question, I would genuinely like to answer it. Email
-            is the surest way to reach me, and I answer everything.
+            If anything here raised a question, I am happy to answer it. Email is the surest way to
+            reach me and I answer everything.
           </p>
 
           <div className="btn-row">
@@ -345,7 +370,7 @@ export function Contact() {
 
           <ul className="contact__lines">
             <li>{profile.phone}</li>
-            <li>{profile.location} · open to remote or relocation</li>
+            <li>{profile.location}, open to remote or relocation</li>
             {socials.map((link) => (
               <li key={link.label}>
                 <a href={link.href} target="_blank" rel="noopener noreferrer">

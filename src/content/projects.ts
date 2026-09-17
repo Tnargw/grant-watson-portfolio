@@ -4,23 +4,15 @@ export type Link = { label: string; href: string; hint?: string };
 
 export type Project = {
   id: string;
-  /** Short name for nav — says what the thing is, not who it was for. */
   navName: string;
-  /** Full title, legible to someone who has never heard of the client. */
+  /** Says what the thing is, not just who it was for. */
   name: string;
-  /** Who it was for and in what capacity. */
   context: string;
   period: string;
-  /** One sentence a reader takes in without stopping. */
   summary: string;
-  /** Two short paragraphs of framing, no more. */
   detail: string[];
-  /** Concrete things built. Scannable. */
   built: string[];
-  /**
-   * The one problem per project worth being asked about in an interview.
-   * Always visible — collapsing it hides the most interesting thing on the page.
-   */
+  /** The one problem per project worth being asked about. Always visible. */
   hardPart: {
     title: string;
     body: string;
@@ -29,7 +21,6 @@ export type Project = {
   stack: string[];
   links: Link[];
   diagram?: DiagramId;
-  /** Team size / ownership, shown as a single line. */
   scale: string;
 };
 
@@ -42,22 +33,22 @@ export const projects: Project[] = [
     period: 'Sept 2024 – July 2025',
     scale: 'Team of 30+ across frontend, backend, and database',
     summary:
-      'A full-stack scheduling, shift-swap, and time-clock system built to replace Sling, the commercial SaaS the department was paying for.',
+      'A scheduling, shift-swap, and time-clock app built to replace Sling, the commercial tool the department was paying for.',
     detail: [
-      'Rec Services runs a large student workforce across multiple campus facilities — shifts, swaps, time-off, clock-ins, and payroll export all went through software the department rented and could not change. They wanted a system they owned, that fit their own rules and met university security standards.',
-      'I led it: the requirements work with the customer, the architecture, and a team of more than thirty student developers split across three sub-teams, with the roster turning over between semesters.',
-      'It is a continuing program rather than a one-semester deliverable — each cohort hands it to the next, and the department still runs Sling while it is built out. So the thing I was actually accountable for was leaving it in a state the next team could build on: a scoped backlog, a documented API, and a schema that would not need tearing up.',
+      'Rec Services runs a lot of student employees across several campus facilities. Shifts, swaps, time-off, clock-ins, and payroll export all went through Sling, which the department rented and could not change. They wanted their own version that fit how they actually work and met the university security rules.',
+      'I was the project lead. That meant doing the requirements work with the customer, deciding the architecture, and keeping a team of thirty-plus student developers moving across three sub-teams. The roster turned over every semester.',
+      'This is an ongoing project, not a one-semester deliverable. Each group of students hands it to the next, and Rec Services is still on Sling while it gets built out. So what I was really responsible for was leaving it in a state the next team could pick up. A scoped backlog, an API they could build against, and a schema that would not need to be torn up.',
     ],
     built: [
-      'API features for authentication, shift management, and data persistence, against a documented OpenAPI contract so the frontend team could build without reading backend source.',
-      'A role hierarchy — employee, coordinator, manager, administrator — with permissions enforced per role.',
-      'The database schema and migration set, running MySQL locally and Supabase Postgres in production through a switcher, so thirty developers never shared one database.',
-      'The requirements and design documents, ER diagram, and semester-by-semester roadmap, written so the next cohort could pick the project up without me.',
-      'The team process: branch per issue, protected main, required peer review before merge, weekly sprints. I reviewed pull requests across all three sub-teams.',
+      'API features for login, shift management, and saving data, built against an OpenAPI spec so the frontend team did not have to read backend source to know what they were calling.',
+      'Role levels for employee, coordinator, manager, and admin, with permissions checked per role.',
+      'The database schema and migrations. It runs on MySQL locally and Supabase Postgres in production through a switcher, so thirty people were never sharing one database.',
+      'The requirements doc, design doc, ER diagram, and a roadmap broken out by semester, written so the next group could start without me explaining it.',
+      'How the team worked day to day. Branch per issue, protected main, review required before merge, weekly sprints. I reviewed pull requests for all three sub-teams.',
     ],
     hardPart: {
       title: 'Cutting twenty-plus requested features down to six',
-      body: 'Elicitation surfaced everything from GPS-verified clock-ins to Workday payroll integration to in-app group chat. All of it reasonable; none of it achievable in one semester by a team that was still forming. I forced a ranked priority list and drew the MVP line under six features — auth, account creation, role-based access control, clock in/out, schedule viewing, and shift scheduling — using one test: could Rec Services stop using Sling for their daily workflow? Everything past that line went into a documented backlog tagged with the semester it was targeted for, so nothing was lost and nobody relitigated it mid-sprint. That backlog is what the next cohort started from.',
+      body: 'The requirements sessions turned up everything from GPS-verified clock-ins to Workday payroll integration to a group chat. All of it was reasonable, and none of it was going to happen in one semester with a team that was still figuring out who was doing what. I made everyone rank the list, then drew the MVP line under six features: login, account creation, roles, clock in and out, viewing your schedule, and scheduling shifts. The question I used was simple. Could Rec Services stop opening Sling to get through a normal day? Anything past that line went into a backlog tagged with the semester it was aimed at, so we did not lose it and nobody had to argue about it again halfway through a sprint. The next group started from that backlog.',
     },
     stack: [
       'React',
@@ -81,23 +72,23 @@ export const projects: Project[] = [
     period: 'Oct – Nov 2025',
     scale: 'Live in production · two-engineer team · posts, comments, collections',
     summary:
-      'An online community platform supporting abuse survivors, live in production on Cloudflare and Supabase, with authorization enforced by the database rather than the client.',
+      'An online community platform for abuse survivors. It is live on Cloudflare and Supabase, and the permission rules live in the database instead of the frontend.',
     detail: [
-      'I worked on this as one of two engineers, shipping features through pull requests into a real deployment pipeline: every branch to staging, main to production, with two separate Supabase instances so a migration never reaches production untested.',
+      'I worked on this with one other engineer. Everything went through pull requests into a real pipeline. Any branch deploys to staging, main deploys to production, and there are two separate Supabase projects so a migration gets tried on staging before it touches real data.',
     ],
     built: [
-      'Posts end to end — creating, editing, deleting, individual post pages, click-through from the feed, and text search.',
-      'Comments, including deletion, with the row-level security policies that scope them to their author.',
-      'Collections and favorites, where ownership is resolved through the parent collection rather than the row itself.',
-      'Seven of the project’s seventeen schema migrations, generated declaratively from schema files rather than hand-written, and reviewed my teammate’s alongside the code that needed them.',
-      'The local seed data set, so any engineer can bring up a working stack with realistic content from nothing.',
+      'Posts from end to end. Writing, editing, deleting, individual post pages, clicking through from the feed, and search.',
+      'Comments and deleting comments, with the row-level security policies that keep you to your own.',
+      'Collections and favorites, where whether you can touch an item depends on whether you own the collection it sits in.',
+      'Seven of the project’s seventeen migrations. They get generated from schema files rather than written by hand. I reviewed my teammate’s.',
+      'The seed data for local development, so a new person can clone the repo and get a working database with real-looking content in it.',
     ],
     hardPart: {
-      title: 'Putting authorization in Postgres instead of in React',
-      body: 'The app talks to Supabase directly from the browser, which means any permission check written in React is advisory — someone can call the API with their own token and skip the UI entirely. For a platform holding this kind of content, "the frontend hides it" is not a security model. So every table has row-level security enabled and access is expressed as policies evaluated against auth.uid() inside the database. Collections were the interesting case: permission on a collection item is a property of its parent collection, not of the row, so the policy runs a nested EXISTS back to the collections table.',
+      title: 'Putting the permission checks in Postgres instead of React',
+      body: 'The app talks to Supabase straight from the browser. That means any permission check I write in React is really just a suggestion. Someone can call the API with their own token and skip my UI completely. On a site holding this kind of content, hiding a button is not security. So every table has row-level security turned on, and the rules are written as policies that Postgres evaluates against auth.uid() on every query. Collections were the interesting one. Whether you can add a post to a collection is not a fact about that row, it is a fact about the collection it belongs to, so the policy has to look back up at the parent.',
       code: {
         language: 'sql',
-        caption: 'collection_posts — ownership resolved through the parent collection',
+        caption: 'collection_posts — ownership checked through the parent collection',
         source: `create policy "Users can add posts to their own collections"
   on "public"."collection_posts"
   as permissive for insert to authenticated
@@ -127,24 +118,24 @@ export const projects: Project[] = [
     id: 'steamlocked',
     navName: 'SteamLocked',
     name: 'SteamLocked — Achievement Challenge App',
-    context: 'Solo — design, build, test, deploy',
+    context: 'Solo project',
     period: 'Aug – Sept 2026',
-    scale: 'Solo · 145 tests · two independent deploy pipelines',
+    scale: 'Solo · 145 tests · two deploy pipelines',
     summary:
-      'Sign in with Steam and get dealt a random achievement you have not earned. It stays your only task until Steam itself confirms the unlock — verified against Steam’s data, not a checkbox.',
+      'Sign in with Steam and it deals you a random achievement you have not earned yet. That stays your only task until Steam confirms you actually got it.',
     detail: [
-      'I built every part of this one: the API on a Cloudflare Worker, sign-in, the frontend, the tests, and both deploy pipelines. It is the project where there was nobody to hand the hard parts to.',
+      'I built all of this one myself. The API, the sign-in, the frontend, the tests, and both deploy pipelines. The two problems I spent the most time on were not in my plan at all. They only showed up once real accounts with real game libraries hit it.',
     ],
     built: [
-      'The whole HTTP API as a Cloudflare Worker — profile, owned games, per-game achievements with global rarity, and the roll endpoint.',
-      'Steam sign-in implemented from the spec over OpenID 2.0, since Steam offers no OAuth, issuing HMAC-SHA256 session tokens via WebCrypto. Return URLs are allowlisted so the flow cannot become an open redirect.',
-      'A difficulty system derived from Steam’s global unlock percentages — easy at 50% and above, down to insane below 5%.',
-      'Reworked caching and batching to fit inside Cloudflare’s 50-subrequest-per-invocation cap, which counts cache reads as well as fetches.',
-      '145 tests across nine Vitest suites covering the API and frontend, and two path-filtered GitHub Actions workflows so a frontend change never redeploys the API.',
+      'The whole API as a Cloudflare Worker. Profile, owned games, achievements with how rare each one is globally, and the endpoint that rolls you a task.',
+      'Steam sign-in written from the spec. Steam does not offer OAuth, only OpenID 2.0, so I verify the identity with Steam directly and issue an HMAC-SHA256 token with WebCrypto. Return URLs get checked against an allowlist so the login flow cannot be turned into an open redirect.',
+      'Difficulty tiers worked out from Steam’s global unlock percentages. Easy is 50% and up, insane is under 5%.',
+      'Reworked caching and batching to fit inside Cloudflare’s cap of 50 subrequests per run, which counts cache reads too.',
+      '145 tests across nine files covering the API and the frontend, and two path-filtered workflows so changing the frontend does not redeploy the API.',
     ],
     hardPart: {
-      title: 'A bug with no error: the image that loaded successfully and was blank',
-      body: 'Some games rendered with empty cover art — not broken images, empty ones. The usual header.jpg path is wrong for a number of newer titles: some 404 cleanly, but others (Battlefield 6 among them) return a blank 1.4 KB placeholder with a 200. The browser fires load, not error, so every fallback I had was unreachable. There was nothing to catch. I stopped trusting the legacy URL pattern and moved to the store API, which reports authoritatively whether art exists, needs no key, and takes 200 app IDs per call — which also helped the subrequest budget. Games with genuinely no art now resolve to null and the UI draws a tile from the title’s initials. "No art" became a state the code models instead of a silent rendering failure.',
+      title: 'A bug with no error: the image that loaded fine and was blank',
+      body: 'Some games showed up with empty cover art. Not broken images, empty ones. The usual header.jpg path is wrong for a lot of newer titles. Some of them 404, which I could handle, but others return a blank 1.4 KB placeholder with a 200. The browser fires load, not error, so none of my fallback code ever ran. There was nothing to catch. I stopped trusting that URL pattern and switched to the store API, which will actually tell you whether art exists. It needs no key and takes 200 app IDs per call, which helped the subrequest problem too. Games with no art now come back as null and the UI draws a tile out of the title’s initials. Now "no art" is a real state instead of something failing quietly.',
     },
     stack: [
       'JavaScript',
@@ -164,23 +155,24 @@ export const projects: Project[] = [
     id: 'automation-pipeline',
     navName: 'Automation pipeline',
     name: 'Owner Statement Automation Pipeline',
-    context: 'Bedrock Investment Property · built on my own initiative',
+    context: 'Bedrock Investment Property · my own idea',
     period: '2026',
-    scale: 'Solo · validated against generated fixtures, pending rollout',
+    scale: 'Solo · running on generated fixtures, not live accounts yet',
     summary:
-      'A Python pipeline that reads a property statement PDF, posts each transaction to QuickBooks Online, and emails the owner a summary through Zoho Mail — replacing a workflow done entirely by hand.',
+      'A Python pipeline that reads a property statement PDF, posts each transaction to QuickBooks Online, and emails the owner a summary through Zoho Mail.',
     detail: [
-      'This started as a data-entry task at my current job: open a PDF, retype the numbers into QuickBooks, email the client. I recognized it as an ETL problem and proposed building it properly instead. It runs end to end against generated sample statements today; the integrations are implemented against QuickBooks and Zoho developer sandboxes and have not yet been cut over to live company accounts.',
+      'This started as data entry at my current job. Open a PDF, retype the numbers into QuickBooks, send the owner an email. That is an ETL problem wearing a chore as a disguise, so I asked if I could build it properly instead.',
+      'It runs end to end on generated sample statements right now. The QuickBooks and Zoho integrations are written against developer sandboxes and have not been pointed at the real company accounts yet.',
     ],
     built: [
-      'A PDF parser that handles a two-column header by reading every word’s (x, y) position, clustering words into visual rows, and splitting each row at the page midpoint.',
-      'Pydantic models for the domain, so the rest of the pipeline works with typed objects rather than loose strings.',
-      'OAuth2 authorization-code flows with token refresh against two third-party APIs — QuickBooks Online and Zoho Mail.',
-      'A pytest suite that round-trips generated fixture PDFs, so no real financial data lives in the repository.',
+      'The PDF parser. The header is two columns, and normal text extraction mixes them into nonsense, so it reads the (x, y) position of every word, groups words into visual rows, and splits each row at the middle of the page.',
+      'Pydantic models for the data, so everything downstream works with real objects instead of loose strings.',
+      'OAuth2 with token refresh for both QuickBooks Online and Zoho Mail.',
+      'A pytest suite that generates sample PDFs and parses them back, so no real financial data is sitting in the repo.',
     ],
     hardPart: {
       title: 'Making it safe to run before it was safe to trust',
-      body: 'A script that posts to a live accounting system and emails clients is not something you test by running it. Dry-run is the default: it parses a real PDF and prints exactly what it would have sent to QuickBooks and Zoho, without credentials or a network call. The test fixtures are synthetic PDFs generated by a script in the repo, with fabricated company names and amounts, so the parser is tested end to end without anyone’s real statements sitting in version control.',
+      body: 'This thing posts to a live accounting system and emails clients. You do not test that by running it and seeing what happens. So dry-run is the default. It parses a real PDF and prints exactly what it would have sent to QuickBooks and Zoho, with no credentials and no network call. The test fixtures are fake statements generated by a script in the repo, with made-up company names and amounts, which means the parser gets tested properly without anyone’s actual statements ending up in version control.',
     },
     stack: ['Python', 'pdfplumber', 'Pydantic', 'OAuth2', 'REST APIs', 'pytest'],
     links: [],
@@ -188,35 +180,34 @@ export const projects: Project[] = [
   },
 ];
 
-/** Smaller work — listed, not given a section each. */
 export const smallerProjects: { name: string; blurb: string; href?: string }[] = [
   {
     name: 'SpecGen',
     blurb:
-      'Turns a plain-English feature description into structured Gherkin scenarios covering happy path, edge cases, and error states, using the Claude API. The engineering is in the system prompt — it reliably catches things the input did not specify, like returning a generic confirmation on an unregistered password-reset email to prevent account enumeration.',
+      'Takes a feature description in plain English and turns it into Gherkin scenarios covering the happy path, edge cases, and error states. Most of the work is in the system prompt. It catches things the input never mentioned, like sending a generic confirmation for an unregistered password-reset email so the form cannot be used to find out who has an account.',
     href: 'https://github.com/Tnargw/specgen',
   },
   {
     name: 'AlgorithmLib',
     blurb:
-      'Thirteen algorithms implemented from scratch in C# against 61 unit tests — Dijkstra, Bellman-Ford, DAG shortest path, a binary heap priority queue, merge sort, quicksort, binary search, Huffman coding, convex hull, string matching, and RSA. The honest answer to "can you write this without a library?"',
+      'Thirteen algorithms written from scratch in C# with 61 unit tests behind them. Dijkstra, Bellman-Ford, DAG shortest path, a binary heap, merge sort, quicksort, binary search, Huffman coding, convex hull, string matching, and RSA. I kept it because it is the answer when someone asks whether I can write this stuff without a library.',
   },
   {
     name: 'Storyium',
     blurb:
-      'Book discovery and reading tracker: extracts subjects from OpenLibrary, queries Google Books for recommendations, and tracks progress. Live, with an animated canvas UI.',
+      'A book recommendation and reading tracker. It pulls subjects out of OpenLibrary for books you already like, asks Google Books for similar ones, and tracks how far through you are.',
     href: 'https://storyium.netlify.app',
   },
   {
     name: 'Peer-to-peer Pong',
     blurb:
-      'Two-player Pong in Python over TCP, using Python Banyan’s topic/payload backplane to sync game state between both clients in real time. Demo video in the repo.',
+      'Two-player Pong in Python over TCP. It uses Python Banyan’s topic and payload system to keep both clients in sync in real time. I built it to learn networking, and a game was the most fun way to do that. Demo video is in the repo.',
     href: 'https://github.com/Tnargw/p2pGame',
   },
   {
     name: 'Snowfall data analysis',
     blurb:
-      'Pulls historical snowfall from the Open-Meteo API, resolves nearby cities through Geonames, and renders interactive Folium heatmaps as standalone HTML.',
+      'Pulls historical snowfall from the Open-Meteo API, finds nearby cities with Geonames, and renders it as an interactive Folium heatmap you can open in a browser.',
     href: 'https://github.com/Tnargw/Snowfall-DataAnalysis',
   },
 ];

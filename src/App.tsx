@@ -3,8 +3,8 @@ import {
   Background,
   Contact,
   Footer,
-  Hero,
   HowIWork,
+  Landing,
   Skills,
   SmallerWork,
   Work,
@@ -23,10 +23,12 @@ export default function App() {
       <Header theme={theme} onToggleTheme={toggle} />
 
       <main id="main">
-        <Hero />
-        <Skills />
+        {/* Landing first and short. Work leads everything past it, because the
+            projects are the reason to keep reading. */}
+        <Landing />
         <Work />
         <SmallerWork />
+        <Skills />
         <HowIWork />
         <Background />
         <Contact />

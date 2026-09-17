@@ -3,8 +3,8 @@ import { useScrollSpy } from '../hooks/useScrollSpy';
 import { profile } from '../content/profile';
 
 export const SECTIONS = [
-  { id: 'skills', label: 'Skills' },
   { id: 'work', label: 'Work' },
+  { id: 'skills', label: 'Skills' },
   { id: 'how-i-work', label: 'How I work' },
   { id: 'background', label: 'Background' },
 ] as const;

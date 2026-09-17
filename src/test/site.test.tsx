@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
 import { projects, smallerProjects } from '../content/projects';
-import { education, howIWork, jobs, profile, proofPoints, skills, socials } from '../content/profile';
+import { education, howIWork, jobs, profile, quickFacts, skills, socials } from '../content/profile';
 import { SECTIONS } from '../components/Header';
 
 describe('content', () => {
@@ -62,7 +62,7 @@ describe('content', () => {
       // copy has to say so rather than implying a live rollout.
       expect(copy).toMatch(/fixture/);
       expect(copy).toMatch(/sandbox/);
-      expect(copy).toMatch(/not yet been cut over/);
+      expect(copy).toMatch(/not live accounts yet|have not been pointed at|not yet been cut over/);
       expect(copy).not.toMatch(/\bin use at\b|\bin production\b/);
     });
 
@@ -104,12 +104,12 @@ describe('content', () => {
   });
 
   it('leads on capability rather than on the degree', () => {
-    expect(profile.positioning.toLowerCase()).not.toContain('degree');
-    expect(profile.positioning.toLowerCase()).not.toContain('graduat');
+    expect(profile.intro.toLowerCase()).not.toContain('degree');
+    expect(profile.intro.toLowerCase()).not.toContain('graduat');
   });
 
-  it('shows exactly four proof points, which is what the hero grid is built for', () => {
-    expect(proofPoints).toHaveLength(4);
+  it('keeps the landing to three quick facts', () => {
+    expect(quickFacts).toHaveLength(3);
   });
 
   it('lists experience newest first', () => {
@@ -170,7 +170,21 @@ describe('App', () => {
 
   it('states availability where a recruiter sees it first', () => {
     render(<App />);
-    expect(screen.getByText(/available for software engineering roles/i)).toBeInTheDocument();
+    expect(screen.getByText(/open to software engineering roles/i)).toBeInTheDocument();
+  });
+
+  it('keeps the landing short — no projects or skills grid above the fold', () => {
+    const { container } = render(<App />);
+    const landing = container.querySelector('#top');
+    expect(landing).not.toBeNull();
+    // The landing is a summary. The moment it starts carrying project bodies
+    // or the full skills grid, it has stopped being a landing.
+    expect(landing!.querySelectorAll('.project')).toHaveLength(0);
+    expect(landing!.querySelectorAll('.skill-col')).toHaveLength(0);
+    expect(landing!.querySelectorAll('.hard')).toHaveLength(0);
+    expect(landing!.querySelectorAll('p').length).toBeLessThanOrEqual(6);
+    // And it points onward.
+    expect(container.querySelector('.scroll-cue')).not.toBeNull();
   });
 
   it('offers the résumé for download', () => {
