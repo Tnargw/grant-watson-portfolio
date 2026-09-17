@@ -1,0 +1,161 @@
+/*
+ * Design tokens.
+ *
+ * Dark is the default look. Light is a full re-declaration of the same token
+ * names, never a filter or an opacity trick, so every surface is chosen
+ * deliberately in both themes. `[data-theme]` on <html> beats the media query
+ * in both directions, which is what makes the toggle work for a viewer whose
+ * OS says the opposite.
+ */
+
+:root {
+  /* --- Palette: dark (default) --- */
+  --bg: #0a0a0b;
+  --bg-elevated: #121214;
+  --surface: #17171a;
+  --surface-hover: #1e1e22;
+  --border: #27272c;
+  --border-strong: #3a3a41;
+
+  --text: #f2f2f3;
+  --text-secondary: #b8b8be;
+  --text-muted: #85858e;
+
+  --accent: #ff8a4c;
+  --accent-hover: #ffa06e;
+  --accent-contrast: #1a0d05;
+  --accent-wash: rgba(255, 138, 76, 0.1);
+  --accent-line: rgba(255, 138, 76, 0.28);
+
+  /* Diagram-only hues. Kept distinct from --accent so a diagram never reads
+     as "the interactive color". */
+  --viz-1: #ff8a4c;
+  --viz-2: #63b3ed;
+  --viz-3: #9f7aea;
+  --viz-4: #68d391;
+  --viz-surface: rgba(255, 255, 255, 0.035);
+
+  --code-bg: #101012;
+  --code-border: #26262b;
+  --code-keyword: #ff9a63;
+  --code-string: #8fd18a;
+  --code-comment: #6c6c76;
+  --code-number: #7fb8e8;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.45);
+
+  /* --- Type --- */
+  --font-sans:
+    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    sans-serif;
+  --font-mono:
+    'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono',
+    monospace;
+
+  /* Fluid scale. Each step interpolates between a phone and a wide desktop so
+     nothing needs a breakpoint just to change size. */
+  --step--1: clamp(0.78rem, 0.76rem + 0.1vw, 0.83rem);
+  --step-0: clamp(0.95rem, 0.92rem + 0.15vw, 1.03rem);
+  --step-1: clamp(1.1rem, 1.04rem + 0.3vw, 1.3rem);
+  --step-2: clamp(1.35rem, 1.22rem + 0.62vw, 1.75rem);
+  --step-3: clamp(1.7rem, 1.44rem + 1.3vw, 2.5rem);
+  --step-4: clamp(2.1rem, 1.6rem + 2.5vw, 3.75rem);
+  --step-5: clamp(2.5rem, 1.6rem + 4.4vw, 5.5rem);
+
+  /* --- Space & shape --- */
+  --gutter: clamp(1.25rem, 4vw, 3rem);
+  --measure: 68ch;
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 16px;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  color-scheme: dark;
+}
+
+/* System preference is light, and the viewer has not overridden it. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme='dark']) {
+    --bg: #fbfbfa;
+    --bg-elevated: #ffffff;
+    --surface: #ffffff;
+    --surface-hover: #f4f4f2;
+    --border: #e4e4e0;
+    --border-strong: #c9c9c3;
+
+    --text: #16161a;
+    --text-secondary: #4a4a52;
+    --text-muted: #6d6d77;
+
+    --accent: #c2410c;
+    --accent-hover: #9a3412;
+    --accent-contrast: #ffffff;
+    --accent-wash: rgba(194, 65, 12, 0.07);
+    --accent-line: rgba(194, 65, 12, 0.25);
+
+    --viz-1: #c2410c;
+    --viz-2: #2563eb;
+    --viz-3: #7c3aed;
+    --viz-4: #15803d;
+    --viz-surface: rgba(0, 0, 0, 0.025);
+
+    --code-bg: #f7f7f5;
+    --code-border: #e4e4e0;
+    --code-keyword: #b03a08;
+    --code-string: #15803d;
+    --code-comment: #85858e;
+    --code-number: #1d4ed8;
+
+    --shadow-sm: 0 1px 2px rgba(20, 20, 25, 0.06);
+    --shadow-md: 0 4px 16px rgba(20, 20, 25, 0.07);
+    --shadow-lg: 0 16px 48px rgba(20, 20, 25, 0.1);
+
+    color-scheme: light;
+  }
+}
+
+/* Explicit choice wins over the OS in both directions. */
+:root[data-theme='light'] {
+  --bg: #fbfbfa;
+  --bg-elevated: #ffffff;
+  --surface: #ffffff;
+  --surface-hover: #f4f4f2;
+  --border: #e4e4e0;
+  --border-strong: #c9c9c3;
+
+  --text: #16161a;
+  --text-secondary: #4a4a52;
+  --text-muted: #6d6d77;
+
+  --accent: #c2410c;
+  --accent-hover: #9a3412;
+  --accent-contrast: #ffffff;
+  --accent-wash: rgba(194, 65, 12, 0.07);
+  --accent-line: rgba(194, 65, 12, 0.25);
+
+  --viz-1: #c2410c;
+  --viz-2: #2563eb;
+  --viz-3: #7c3aed;
+  --viz-4: #15803d;
+  --viz-surface: rgba(0, 0, 0, 0.025);
+
+  --code-bg: #f7f7f5;
+  --code-border: #e4e4e0;
+  --code-keyword: #b03a08;
+  --code-string: #15803d;
+  --code-comment: #85858e;
+  --code-number: #1d4ed8;
+
+  --shadow-sm: 0 1px 2px rgba(20, 20, 25, 0.06);
+  --shadow-md: 0 4px 16px rgba(20, 20, 25, 0.07);
+  --shadow-lg: 0 16px 48px rgba(20, 20, 25, 0.1);
+
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}
