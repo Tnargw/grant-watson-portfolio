@@ -5,19 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Grant Watson — Software Engineer</title>
-    <meta
-      name="description"
-      content="Grant Watson, software engineer. I build full-stack web apps and the APIs behind them. React and TypeScript on the front, Node and Postgres underneath, deployed through CI to Cloudflare and Supabase. Open to software engineering roles."
-    />
+    <meta name="description" content="Grant Watson, software engineer. I build across the stack and beyond the web, from React frontends and Node APIs to Python data tools, networking projects, and algorithms written from scratch. Open to software engineering roles." />
     <meta name="author" content="Grant Watson" />
     <link rel="canonical" href="https://grant-watson-portfolio.pages.dev/" />
 
-    <!-- Painted before first paint so a dark-mode viewer never sees a white
-         flash, and so the stored preference beats the OS on the very first
-         frame rather than after hydration. -->
+    <!-- Applied before first paint so the page never flashes the wrong theme. -->
     <script>
       (function () {
-        // If something already stamped a theme, that wins — don't fight it.
         if (document.documentElement.hasAttribute('data-theme')) return;
         try {
           var stored = localStorage.getItem('gw-portfolio-theme');
@@ -36,15 +30,12 @@
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Grant Watson — Software Engineer" />
-    <meta
-      property="og:description"
-      content="I build full-stack web apps and the APIs behind them. I led a thirty-person team through a real client build and shipped features into a platform that is live today. Open to software engineering roles."
-    />
+    <meta property="og:description" content="Grant Watson, software engineer. I build across the stack and beyond the web, from React frontends and Node APIs to Python data tools, networking projects, and algorithms written from scratch. Open to software engineering roles." />
     <meta property="og:url" content="https://grant-watson-portfolio.pages.dev/" />
     <meta property="og:image" content="https://grant-watson-portfolio.pages.dev/og.png" />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="theme-color" content="#0a0a0b" media="(prefers-color-scheme: dark)" />
     <meta name="theme-color" content="#fbfbfa" media="(prefers-color-scheme: light)" />
 
@@ -55,8 +46,6 @@
       rel="stylesheet"
     />
 
-    <!-- Structured data: lets search engines and LinkedIn-style scrapers read
-         the role, employer, and skills rather than guessing from prose. -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -76,24 +65,19 @@
           "name": "Brigham Young University–Idaho"
         },
         "knowsAbout": [
-          "TypeScript",
-          "JavaScript",
           "Python",
+          "TypeScript",
+          "C#",
+          "JavaScript",
+          "SQL",
           "React",
           "Node.js",
           "PostgreSQL",
-          "Supabase",
-          "Cloudflare Workers",
-          "SQL",
-          "C#",
           "REST API design",
-          "OAuth2",
-          "CI/CD"
+          "Algorithms",
+          "Concurrency"
         ],
-        "sameAs": [
-          "https://github.com/Tnargw",
-          "https://www.linkedin.com/in/grant-watson-/"
-        ]
+        "sameAs": ["https://github.com/Tnargw", "https://www.linkedin.com/in/grant-watson-/"]
       }
     </script>
   </head>

@@ -29,34 +29,48 @@ npm run dev
 
 ## How it is put together
 
+Three pages, built as three real HTML documents rather than a single-page app
+with a router.
+
 ```
+index.html          →  src/main.tsx   →  src/pages/Home.tsx
+work/index.html     →  src/work.tsx   →  src/pages/WorkPage.tsx
+about/index.html    →  src/about.tsx  →  src/pages/AboutPage.tsx
+
 src/
   content/
-    profile.ts     Identity, proof points, skills, how-I-work, education, jobs
+    profile.ts     Identity, quick facts, skills, how-I-work, education, jobs
     projects.ts    The four projects and the smaller ones
   components/
-    Sections.tsx   Every page section — presentation only, no copy
-    Header.tsx     Sticky nav with scroll-spy
+    Header.tsx     Page nav, marks the current document
+    Sections.tsx   Every section, shared across pages. Presentation only
     Diagrams.tsx   Architecture diagrams, hand-drawn as inline SVG
     CodeBlock.tsx  A ~40-line highlighter, so no library ships for two excerpts
-  hooks/
-    useTheme.ts    Stored preference, falling back to the OS
-    useScrollSpy.ts One IntersectionObserver, no scroll listener
-  styles/
-    tokens.css     Light and dark, each declared in full
-    global.css     Everything else
+  hooks/useTheme.ts
+  styles/          tokens.css (light and dark in full), global.css
 ```
 
-Content and presentation are separated on purpose: the copy is the product on a
-site like this, and it should be editable without touching JSX.
+| Page      | What is on it                                              |
+| --------- | ---------------------------------------------------------- |
+| `/`       | Who I am, availability, stack, one line per project, contact |
+| `/work/`  | The four projects in full, plus the smaller ones            |
+| `/about/` | Skills, how I work on a team, experience, education         |
 
 ### Decisions worth naming
 
-**Ordered for how a hiring manager actually reads.** Stack sits directly under
-the hero, before the projects, because a recruiter or engineering manager scans
-for stack match before they read anything. Then the work, then a section on how
-I operate on a team, then background. The degree is a supporting fact near the
-bottom, not the opening line.
+**The home page is a summary, not the whole site.** It holds what a résumé
+fits on its first screen: who I am, what I work with, what I have built as one
+line each, and how to reach me. Anything needing more than a line lives on its
+own page. Someone skimming should not scroll past six thousand words to find my
+email, and someone interested should get the detail in one click. A test fails
+if project bodies, the skills grid, or experience entries appear on the home
+page.
+
+**Three documents, not a router.** Each page is a real URL with its own title,
+description and social card, so a search result for `/work/` opens the work
+page rather than an empty shell that then fetches it. There is no SPA fallback
+to configure on the host, and Vite splits the shared React bundle so navigating
+between pages does not re-download it.
 
 **The hard part is never collapsed.** Each project ends with one problem stated
 in full — the constraint, what I chose, and why. The deeper version of this site

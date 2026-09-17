@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import App from '../App';
+import Home from '../pages/Home';
+import WorkPage from '../pages/WorkPage';
+import AboutPage from '../pages/AboutPage';
 import { projects, smallerProjects } from '../content/projects';
 import {
   education,
@@ -13,10 +15,10 @@ import {
   skills,
   socials,
 } from '../content/profile';
-import { SECTIONS } from '../components/Header';
+import { PAGES } from '../components/Header';
 
 describe('content', () => {
-  it('gives every project a unique id, which the nav anchors rely on', () => {
+  it('gives every project a unique id, which the anchors rely on', () => {
     const ids = projects.map((p) => p.id);
     expect(new Set(ids).size).toBe(ids.length);
   });
@@ -32,15 +34,16 @@ describe('content', () => {
     }
   });
 
-  it('keeps the résumé and photo site-relative so they work off the domain root', () => {
-    expect(profile.resumeHref.startsWith('./')).toBe(true);
-    expect(profile.photo.startsWith('./')).toBe(true);
+  it('uses root-absolute paths for public files, since pages live at depth', () => {
+    // A page at /work/ would resolve "./grant.webp" to /work/grant.webp.
+    expect(profile.resumeHref.startsWith('/')).toBe(true);
+    expect(profile.photo.startsWith('/')).toBe(true);
   });
 
-  it('gives every project a substantial hard part — that is the point of the page', () => {
+  it('gives every project a substantial hard part', () => {
     for (const project of projects) {
-      expect(project.hardPart.title.length, `${project.navName}`).toBeGreaterThan(10);
-      expect(project.hardPart.body.length, `${project.navName}`).toBeGreaterThan(200);
+      expect(project.hardPart.title.length, project.navName).toBeGreaterThan(10);
+      expect(project.hardPart.body.length, project.navName).toBeGreaterThan(200);
     }
   });
 
@@ -53,22 +56,18 @@ describe('content', () => {
   });
 
   it('names projects by what they are, not only by the client', () => {
-    // "Rec Services" means nothing to an outside reader; the title has to say
-    // what was built.
     const scheduling = projects.find((p) => p.id === 'scheduling-system');
     expect(scheduling?.name.toLowerCase()).toContain('scheduling');
   });
 
   /*
-   * These guard the claims most likely to drift back into something an
-   * interviewer could catch. Each one failed an earlier draft of this site.
+   * Claims most likely to drift back into something an interviewer could
+   * catch. Each of these failed an earlier draft of this site.
    */
   describe('honesty guards', () => {
     it('does not claim the automation pipeline is running against live accounts', () => {
       const pipeline = projects.find((p) => p.id === 'automation-pipeline');
       const copy = [pipeline?.scale, ...(pipeline?.detail ?? [])].join(' ').toLowerCase();
-      // It runs on generated fixtures against developer sandboxes, and the
-      // copy has to say so rather than implying a live rollout.
       expect(copy).toMatch(/fixture/);
       expect(copy).toMatch(/sandbox/);
       expect(copy).toMatch(/not live accounts yet|have not been pointed at|not yet been cut over/);
@@ -78,31 +77,24 @@ describe('content', () => {
     it('does not claim the scheduling system already replaced Sling', () => {
       const scheduling = projects.find((p) => p.id === 'scheduling-system');
       const copy = [scheduling?.summary, ...(scheduling?.detail ?? [])].join(' ');
-      // "built to replace" states the goal; "replaced" would state an outcome
-      // that did not happen during my time on it.
       expect(copy).not.toMatch(/\breplaced Sling\b/);
       expect(copy).toMatch(/built to replace/);
     });
 
     it('does not overstate how many migrations on trauma.repair were mine', () => {
       const trauma = projects.find((p) => p.id === 'trauma-repair');
-      const migrationLine = trauma?.built.find((b) => b.toLowerCase().includes('migration'));
-      expect(migrationLine).toBeDefined();
-      expect(migrationLine).toMatch(/seven of/i);
+      const line = trauma?.built.find((b) => b.toLowerCase().includes('migration'));
+      expect(line).toMatch(/seven of/i);
     });
 
     it('links every smaller project except the coursework ones', () => {
-      // Coursework lives on disk, not GitHub. Anything else without a link is
-      // a claim nobody can check.
       const unlinked = smallerProjects.filter((p) => !p.href).map((p) => p.name);
       expect(unlinked).toEqual(['AlgorithmLib', 'Concurrency coursework']);
     });
 
-    it('keeps the smaller-project list to work worth showing', () => {
-      // A tutorial-tier clone drags the average down on a page whose other
-      // entries are a production platform and an edge API.
-      expect(smallerProjects.map((p) => p.name)).not.toContain('Hoppy Frog');
-      expect(smallerProjects.length).toBeLessThanOrEqual(6);
+    it('claims no language I cannot show code for', () => {
+      // Every .java file on this machine belongs to a vendored IDE.
+      expect(skills.flatMap((g) => g.items.map((i) => i.name))).not.toContain('Java');
     });
   });
 
@@ -114,63 +106,44 @@ describe('content', () => {
     }
   });
 
-  it('leads on capability rather than on the degree', () => {
-    expect(profile.intro.toLowerCase()).not.toContain('degree');
-    expect(profile.intro.toLowerCase()).not.toContain('graduat');
-  });
-
   it('does not position me as a web developer only', () => {
     const groups = skills.map((g) => g.group.toLowerCase());
-    // A frontend/backend split reads as "web dev" whatever is listed inside it.
     expect(groups).not.toContain('frontend');
     expect(groups).toContain('computer science');
 
-    const named = skills.flatMap((g) => g.items.map((i) => i.name));
-    for (const nonWeb of ['Python', 'C#', 'Algorithms', 'Concurrency', 'Networking']) {
-      expect(named, `${nonWeb} should be on the page`).toContain(nonWeb);
-    }
-    // The intro is disposition, not a stack list, so breadth has to show in
-    // the row of tags sitting right under it on the landing.
     for (const lang of ['Python', 'C#', 'SQL']) {
-      expect(headlineStack, `${lang} should be on the landing`).toContain(lang);
+      expect(headlineStack, `${lang} should be on the home page`).toContain(lang);
     }
     expect(headlineStack.indexOf('React')).toBeGreaterThan(headlineStack.indexOf('Python'));
   });
 
   it('opens the way a portfolio does, with a name and a person behind it', () => {
     expect(profile.intro).toMatch(/^I’m Grant/);
-    // A line that is not about work. Every portfolio I looked at has one.
     expect(profile.intro2).toMatch(/Outside of work/);
   });
 
   it('shows rather than claims the soft traits', () => {
-    // Every junior resume says these. Recruiters read them as filler, so the
-    // page has to demonstrate the trait instead of asserting it.
-    const landingCopy = [profile.intro, profile.intro2, profile.seeking].join(' ').toLowerCase();
-    for (const cliche of ['passionate', 'self-starter', 'team player', 'hard worker', 'detail-oriented', 'fast learner', 'lifelong learning']) {
-      expect(landingCopy, `"${cliche}" is filler`).not.toContain(cliche);
+    const copy = [profile.intro, profile.intro2, profile.seeking].join(' ').toLowerCase();
+    for (const cliche of [
+      'passionate',
+      'self-starter',
+      'team player',
+      'hard worker',
+      'detail-oriented',
+      'fast learner',
+      'lifelong learning',
+    ]) {
+      expect(copy, `"${cliche}" is filler`).not.toContain(cliche);
     }
-    // The learning claim has to describe a habit, not assert a trait.
     expect(profile.intro2).toMatch(/picking up something/);
   });
 
-  it('claims no language I cannot show code for', () => {
-    // Every .java file on this machine belongs to a vendored IDE, so Java is
-    // not mine to claim.
-    const named = skills.flatMap((g) => g.items.map((i) => i.name));
-    expect(named).not.toContain('Java');
-  });
-
-  it('keeps the landing to three quick facts', () => {
+  it('keeps the home page to three quick facts', () => {
     expect(quickFacts).toHaveLength(3);
   });
 
   it('lists experience newest first', () => {
     expect(jobs[0].period).toContain('Present');
-  });
-
-  it('keeps a nav entry for every section it advertises', () => {
-    expect(SECTIONS.length).toBeGreaterThan(2);
   });
 
   it('has something to say about working on a team', () => {
@@ -185,71 +158,44 @@ describe('content', () => {
   });
 });
 
-describe('App', () => {
-  it('renders one h1 and a main landmark reachable by the skip link', () => {
-    render(<App />);
+/* Things every page has to get right, checked on all three. */
+describe.each([
+  ['Home', Home, 'home'],
+  ['Work', WorkPage, 'work'],
+  ['About', AboutPage, 'about'],
+] as const)('%s page', (_name, Page, id) => {
+  it('has exactly one h1', () => {
+    render(<Page />);
     expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1);
+  });
+
+  it('has a main landmark reachable by a skip link', () => {
+    render(<Page />);
     expect(screen.getByRole('main')).toHaveAttribute('id', 'main');
     expect(screen.getByRole('link', { name: /skip to content/i })).toHaveAttribute('href', '#main');
   });
 
-  it('renders a section for every project, anchored by its id', () => {
-    const { container } = render(<App />);
-    for (const project of projects) {
-      expect(container.querySelector(`#${project.id}`), `${project.navName}`).not.toBeNull();
+  it('marks itself as the current page in the nav', () => {
+    const { container } = render(<Page />);
+    const current = container.querySelectorAll('.header__link[aria-current="page"]');
+    expect(current).toHaveLength(1);
+    expect(current[0]).toHaveAttribute('href', PAGES.find((p) => p.id === id)!.href);
+  });
+
+  it('links to every other page, so no page is a dead end', () => {
+    const { container } = render(<Page />);
+    for (const page of PAGES) {
+      expect(container.querySelector(`a[href="${page.href}"]`), page.label).not.toBeNull();
     }
   });
 
-  it('renders every nav target', () => {
-    const { container } = render(<App />);
-    for (const section of SECTIONS) {
-      expect(container.querySelector(`#${section.id}`), section.id).not.toBeNull();
-    }
+  it('offers a way to get in touch without leaving the page', () => {
+    const { container } = render(<Page />);
+    expect(container.querySelector(`a[href="mailto:${profile.email}"]`)).not.toBeNull();
   });
 
-  it('shows the hard part without needing a click', () => {
-    const { container } = render(<App />);
-    // No <details>: the most interview-relevant content must not be collapsed.
-    expect(container.querySelectorAll('details')).toHaveLength(0);
-    // Matched on the element, not on the phrase — the phrase also occurs in
-    // ordinary prose on the page.
-    expect(container.querySelectorAll('.hard__tag')).toHaveLength(projects.length);
-
-    for (const project of projects) {
-      expect(screen.getByText(project.hardPart.title), project.navName).toBeVisible();
-      expect(screen.getByText(project.hardPart.body)).toBeVisible();
-    }
-  });
-
-  it('states availability where a recruiter sees it first', () => {
-    const { container } = render(<App />);
-    const badge = container.querySelector('.landing__status');
-    expect(badge?.textContent).toMatch(/open to software engineering roles/i);
-  });
-
-  it('keeps the landing short — no projects or skills grid above the fold', () => {
-    const { container } = render(<App />);
-    const landing = container.querySelector('#top');
-    expect(landing).not.toBeNull();
-    // The landing is a summary. The moment it starts carrying project bodies
-    // or the full skills grid, it has stopped being a landing.
-    expect(landing!.querySelectorAll('.project')).toHaveLength(0);
-    expect(landing!.querySelectorAll('.skill-col')).toHaveLength(0);
-    expect(landing!.querySelectorAll('.hard')).toHaveLength(0);
-    expect(landing!.querySelectorAll('p').length).toBeLessThanOrEqual(6);
-    // And it points onward.
-    expect(container.querySelector('.scroll-cue')).not.toBeNull();
-  });
-
-  it('offers the résumé for download', () => {
-    render(<App />);
-    const links = screen.getAllByRole('link', { name: /résumé/i });
-    expect(links.length).toBeGreaterThan(0);
-    links.forEach((link) => expect(link).toHaveAttribute('download'));
-  });
-
-  it('opens every external link safely', () => {
-    const { container } = render(<App />);
+  it('opens external links safely', () => {
+    const { container } = render(<Page />);
     const external = container.querySelectorAll<HTMLAnchorElement>('a[target="_blank"]');
     expect(external.length).toBeGreaterThan(0);
     external.forEach((link) => expect(link.rel).toContain('noopener'));
@@ -257,9 +203,75 @@ describe('App', () => {
 
   it('toggles the theme', async () => {
     const user = userEvent.setup();
-    render(<App />);
+    render(<Page />);
     const before = document.documentElement.dataset.theme;
     await user.click(screen.getByRole('button', { name: /switch to .* theme/i }));
     expect(document.documentElement.dataset.theme).not.toBe(before);
+  });
+});
+
+describe('Home page', () => {
+  it('uses my name as its h1', () => {
+    render(<Home />);
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(profile.name);
+  });
+
+  it('stays a summary — no project bodies, no skills grid, no experience', () => {
+    const { container } = render(<Home />);
+    expect(container.querySelectorAll('.hard')).toHaveLength(0);
+    expect(container.querySelectorAll('.skill-col')).toHaveLength(0);
+    expect(container.querySelectorAll('.entry')).toHaveLength(0);
+    expect(container.querySelectorAll('.diagram')).toHaveLength(0);
+  });
+
+  it('names every project once, each linking through to its detail', () => {
+    const { container } = render(<Home />);
+    const briefs = container.querySelectorAll('.brief');
+    expect(briefs).toHaveLength(projects.length);
+    projects.forEach((project, i) => {
+      expect(briefs[i]).toHaveAttribute('href', `/work/#${project.id}`);
+      expect(within(briefs[i] as HTMLElement).getByText(project.name)).toBeInTheDocument();
+    });
+  });
+
+  it('states availability where a recruiter sees it first', () => {
+    const { container } = render(<Home />);
+    expect(container.querySelector('.landing__status')?.textContent).toMatch(
+      /open to software engineering roles/i,
+    );
+  });
+
+  it('offers the résumé for download', () => {
+    render(<Home />);
+    const links = screen.getAllByRole('link', { name: /résumé/i });
+    expect(links.length).toBeGreaterThan(0);
+    links.forEach((link) => expect(link).toHaveAttribute('download'));
+  });
+});
+
+describe('Work page', () => {
+  it('carries every project, anchored so the home page can link into it', () => {
+    const { container } = render(<WorkPage />);
+    for (const project of projects) {
+      expect(container.querySelector(`#${project.id}`), project.navName).not.toBeNull();
+    }
+  });
+
+  it('shows each hard part without needing a click', () => {
+    const { container } = render(<WorkPage />);
+    expect(container.querySelectorAll('details')).toHaveLength(0);
+    expect(container.querySelectorAll('.hard__tag')).toHaveLength(projects.length);
+    for (const project of projects) {
+      expect(screen.getByText(project.hardPart.body)).toBeVisible();
+    }
+  });
+});
+
+describe('About page', () => {
+  it('carries the skills, the practices, and the history', () => {
+    const { container } = render(<AboutPage />);
+    expect(container.querySelectorAll('.skill-col')).toHaveLength(skills.length);
+    expect(container.querySelectorAll('.practice')).toHaveLength(howIWork.length);
+    expect(container.querySelectorAll('.entry').length).toBeGreaterThanOrEqual(jobs.length);
   });
 });

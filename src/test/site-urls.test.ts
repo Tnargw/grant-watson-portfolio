@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 // Read through Vite's own pipeline rather than node:fs, so this stays inside
 // the app's TypeScript config instead of pulling Node types into it.
-import html from '../../index.html?raw';
+import home from '../../index.html?raw';
+import work from '../../work/index.html?raw';
+import about from '../../about/index.html?raw';
 import robots from '../../public/robots.txt?raw';
 import sitemap from '../../public/sitemap.xml?raw';
 
@@ -17,6 +19,7 @@ import sitemap from '../../public/sitemap.xml?raw';
  */
 
 const publicFiles = Object.keys(import.meta.glob('../../public/*'));
+const pages = { '/': home, '/work/': work, '/about/': about };
 
 /** Hosts that belong to other people and are not self-references. */
 const EXTERNAL =
@@ -28,15 +31,37 @@ function selfOrigins(text: string): string[] {
 }
 
 describe('site URLs', () => {
-  it('declares a canonical URL, an og:url, an og:image, and a sitemap', () => {
-    expect(html).toMatch(/<link rel="canonical" href="https:\/\/[^"]+"/);
-    expect(html).toMatch(/<meta property="og:url" content="https:\/\/[^"]+"/);
-    expect(html).toMatch(/<meta property="og:image" content="https:\/\/[^"]+\/og\.png"/);
+  it('gives every page its own title, description, and canonical', () => {
+    const titles = new Set<string>();
+    for (const [path, html] of Object.entries(pages)) {
+      expect(html, `${path} has no title`).toMatch(/<title>[^<]+<\/title>/);
+      titles.add(html.match(/<title>([^<]+)<\/title>/)![1]);
+      expect(html, `${path} has no description`).toMatch(/<meta name="description" content="[^"]+"/);
+      // The canonical has to name this page, not the home page.
+      expect(html, `${path} canonical is wrong`).toContain(
+        `<link rel="canonical" href="https://grant-watson-portfolio.pages.dev${path}"`,
+      );
+      expect(html).toContain(`<meta property="og:url" content="https://grant-watson-portfolio.pages.dev${path}"`);
+    }
+    // Duplicate titles across pages are a real SEO problem.
+    expect(titles.size).toBe(Object.keys(pages).length);
+  });
+
+  it('declares an og:image and a sitemap', () => {
+    expect(home).toMatch(/<meta property="og:image" content="https:\/\/[^"]+\/og\.png"/);
     expect(robots).toMatch(/^Sitemap: https:\/\/\S+\/sitemap\.xml$/m);
   });
 
+  it('lists every page in the sitemap', () => {
+    for (const path of Object.keys(pages)) {
+      expect(sitemap, `${path} missing from sitemap`).toContain(
+        `<loc>https://grant-watson-portfolio.pages.dev${path}</loc>`,
+      );
+    }
+  });
+
   it('uses one and only one origin across the HTML, robots.txt, and sitemap', () => {
-    const origins = [...selfOrigins(html), ...selfOrigins(robots), ...selfOrigins(sitemap)];
+    const origins = [...Object.values(pages).flatMap(selfOrigins), ...selfOrigins(robots), ...selfOrigins(sitemap)];
     expect(origins.length, 'expected self-referencing URLs').toBeGreaterThan(3);
     const distinct = [...new Set(origins)];
     expect(distinct.length, `origins disagree: ${distinct.join(', ')}`).toBe(1);

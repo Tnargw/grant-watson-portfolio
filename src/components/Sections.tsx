@@ -1,125 +1,33 @@
-import {
-  education,
-  headlineStack,
-  howIWork,
-  jobs,
-  profile,
-  quickFacts,
-  skills,
-  socials,
-} from '../content/profile';
+import { education, howIWork, jobs, profile, skills, socials } from '../content/profile';
 import { projects, smallerProjects } from '../content/projects';
 import { CodeBlock } from './CodeBlock';
 import { Diagram } from './Diagrams';
 
-/**
- * The landing screen. Deliberately short: name, what I do, whether I'm
- * available, the stack, three facts, and a way to reach me. Anyone who wants
- * more scrolls, and the arrow at the bottom says so.
- */
-export function Landing() {
+/** The one <h1> on a sub-page, so each document has exactly one. */
+export function PageHeader({
+  eyebrow,
+  title,
+  lede,
+}: {
+  eyebrow: string;
+  title: string;
+  lede: string;
+}) {
   return (
-    <section className="landing" id="top">
-      <div className="landing__grid" aria-hidden="true" />
-
+    <header className="page-head">
       <div className="shell">
-        <div className="landing__inner">
-          <div>
-            <p className="landing__status">
-              <span className="landing__dot" aria-hidden="true" />
-              Open to software engineering roles
-            </p>
-
-            <h1>{profile.name}</h1>
-
-            <p className="landing__intro">{profile.intro}</p>
-            <p className="landing__intro landing__intro--sub">{profile.intro2}</p>
-            <p className="landing__seeking">{profile.seeking}</p>
-
-            <div className="btn-row landing__actions">
-              <a className="btn btn--primary" href="#work">
-                See the work
-              </a>
-              <a className="btn" href={profile.resumeHref} download>
-                Résumé
-              </a>
-              <a className="btn" href={`mailto:${profile.email}`}>
-                Email
-              </a>
-              {socials.map((link) => (
-                <a
-                  key={link.label}
-                  className="btn btn--ghost"
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {link.label}
-                </a>
-              ))}
-            </div>
-          </div>
-
-          <img
-            className="landing__portrait"
-            src={profile.photo}
-            alt={profile.name}
-            width="176"
-            height="176"
-            loading="eager"
-            decoding="async"
-          />
-        </div>
-
-        <div className="landing__facts">
-          <dl>
-            {quickFacts.map((fact) => (
-              <div key={fact.label}>
-                <dt>{fact.label}</dt>
-                <dd>{fact.value}</dd>
-              </div>
-            ))}
-          </dl>
-
-          <ul className="tag-row landing__stack" aria-label="Main technologies">
-            {headlineStack.map((tech) => (
-              <li className="tag" key={tech}>
-                {tech}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <a className="scroll-cue" href="#work">
-          Four projects, and the hard part of each one
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-            <path
-              d="M8 3v10M4 9l4 4 4-4"
-              stroke="currentColor"
-              strokeWidth="1.6"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </a>
+        <p className="eyebrow">{eyebrow}</p>
+        <h1>{title}</h1>
+        <p>{lede}</p>
       </div>
-    </section>
+    </header>
   );
 }
 
 export function Work() {
   return (
-    <section className="section" id="work" aria-labelledby="work-h">
+    <section className="section section--flush" id="work" aria-label="Projects">
       <div className="shell">
-        <div className="section-head">
-          <p className="eyebrow">Selected work</p>
-          <h2 id="work-h">Four things I built</h2>
-          <p>
-            What each one was for, what I built, and the one problem from each that I would most
-            want to be asked about.
-          </p>
-        </div>
-
         {projects.map((project) => (
           <article className="project" id={project.id} key={project.id}>
             <header className="project__head">

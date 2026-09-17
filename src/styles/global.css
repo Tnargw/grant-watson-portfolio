@@ -346,6 +346,28 @@ ol {
   }
 }
 
+/* Sub-page header: carries that document's single <h1>. */
+.page-head {
+  padding-block: clamp(2.5rem, 6vw, 4rem) clamp(1.5rem, 3vw, 2.25rem);
+  border-bottom: 1px solid var(--border);
+}
+
+.page-head h1 {
+  font-size: var(--step-3);
+  margin-block: 0.6rem 0.8rem;
+}
+
+.page-head p {
+  color: var(--text-secondary);
+  font-size: var(--step-1);
+  max-width: var(--measure);
+}
+
+/* The page header already provides the top rule and spacing. */
+.section--flush {
+  padding-top: clamp(2.5rem, 5vw, 3.5rem);
+}
+
 /* ---------------------------------------------------------------- landing -- */
 
 .landing {
@@ -502,34 +524,54 @@ ol {
   gap: 0.35rem;
 }
 
-.scroll-cue {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: clamp(1.1rem, 2.5vw, 1.5rem);
-  font-family: var(--font-mono);
-  font-size: var(--step--1);
-  color: var(--text-muted);
-  text-decoration: none;
-  transition: color 0.15s var(--ease);
+/*
+ * One row per project on the home page: name, one line, and where it came
+ * from. The whole row is the link, so the target is large and nobody has to
+ * aim at a word.
+ */
+.brief-list {
+  display: grid;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
 }
 
-.scroll-cue:hover {
+.brief {
+  display: grid;
+  gap: 0.3rem;
+  padding: 1.15rem 1.35rem;
+  background: var(--bg-elevated);
+  text-decoration: none;
+  transition: background 0.15s var(--ease);
+}
+
+.brief:hover {
+  background: var(--surface-hover);
+}
+
+.brief__name {
+  font-weight: 600;
+  font-size: var(--step-1);
+  letter-spacing: -0.015em;
+}
+
+.brief:hover .brief__name {
   color: var(--accent);
 }
 
-.scroll-cue svg {
-  animation: nudge 2.2s var(--ease) infinite;
+.brief__summary {
+  color: var(--text-secondary);
+  font-size: var(--step--1);
+  line-height: 1.55;
+  max-width: var(--measure);
 }
 
-@keyframes nudge {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(3px);
-  }
+.brief__meta {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
 }
 
 /* ----------------------------------------------------------------- skills -- */

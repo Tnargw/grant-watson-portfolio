@@ -1,23 +1,21 @@
 import { useEffect, useState } from 'react';
-import { useScrollSpy } from '../hooks/useScrollSpy';
 import { profile } from '../content/profile';
 
-export const SECTIONS = [
-  { id: 'work', label: 'Work' },
-  { id: 'skills', label: 'Skills' },
-  { id: 'how-i-work', label: 'How I work' },
-  { id: 'background', label: 'Background' },
+export const PAGES = [
+  { id: 'home', label: 'Home', href: '/' },
+  { id: 'work', label: 'Work', href: '/work/' },
+  { id: 'about', label: 'About', href: '/about/' },
 ] as const;
 
-const SECTION_IDS = SECTIONS.map((s) => s.id) as unknown as string[];
+export type PageId = (typeof PAGES)[number]['id'];
 
 type Props = {
+  current: PageId;
   theme: 'light' | 'dark';
   onToggleTheme: () => void;
 };
 
-export function Header({ theme, onToggleTheme }: Props) {
-  const active = useScrollSpy(SECTION_IDS);
+export function Header({ current, theme, onToggleTheme }: Props) {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -30,20 +28,22 @@ export function Header({ theme, onToggleTheme }: Props) {
   return (
     <header className="header" data-scrolled={scrolled}>
       <div className="shell header__inner">
-        <a className="header__mark" href="#top">
+        <a className="header__mark" href="/">
           {profile.name}
           <span>SWE</span>
         </a>
 
-        <nav className="header__nav" aria-label="Sections">
-          {SECTIONS.map((section) => (
+        <nav className="header__nav" aria-label="Pages">
+          {PAGES.map((page) => (
             <a
-              key={section.id}
+              key={page.id}
               className="header__link"
-              href={`#${section.id}`}
-              aria-current={active === section.id ? 'true' : undefined}
+              href={page.href}
+              /* aria-current="page" is the correct value for navigation
+                 between documents, unlike the "true" used for in-page anchors. */
+              aria-current={current === page.id ? 'page' : undefined}
             >
-              {section.label}
+              {page.label}
             </a>
           ))}
         </nav>

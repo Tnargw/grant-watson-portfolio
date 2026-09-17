@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Work — Grant Watson</title>
+    <meta name="description" content="Four projects in detail: an employee scheduling system built with a team of thirty, a production community platform, a Cloudflare Worker app, and a Python automation pipeline. Each with the hardest problem in it." />
+    <meta name="author" content="Grant Watson" />
+    <link rel="canonical" href="https://grant-watson-portfolio.pages.dev/work/" />
+
+    <!-- Applied before first paint so the page never flashes the wrong theme. -->
+    <script>
+      (function () {
+        if (document.documentElement.hasAttribute('data-theme')) return;
+        try {
+          var stored = localStorage.getItem('gw-portfolio-theme');
+          var theme =
+            stored === 'light' || stored === 'dark'
+              ? stored
+              : window.matchMedia('(prefers-color-scheme: light)').matches
+                ? 'light'
+                : 'dark';
+          document.documentElement.dataset.theme = theme;
+        } catch (e) {
+          document.documentElement.dataset.theme = 'dark';
+        }
+      })();
+    </script>
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Work — Grant Watson" />
+    <meta property="og:description" content="Four projects in detail: an employee scheduling system built with a team of thirty, a production community platform, a Cloudflare Worker app, and a Python automation pipeline. Each with the hardest problem in it." />
+    <meta property="og:url" content="https://grant-watson-portfolio.pages.dev/work/" />
+    <meta property="og:image" content="https://grant-watson-portfolio.pages.dev/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#0a0a0b" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#fbfbfa" media="(prefers-color-scheme: light)" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/work.tsx"></script>
+  </body>
+</html>

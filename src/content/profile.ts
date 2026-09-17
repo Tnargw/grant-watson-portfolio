@@ -16,8 +16,8 @@ export const profile = {
   location: 'Bowling Green, KY',
   email: 'tnargw@gmail.com',
   phone: '(859) 488-1103',
-  resumeHref: './Grant-Watson-Resume.pdf',
-  photo: './grant.webp',
+  resumeHref: '/Grant-Watson-Resume.pdf',
+  photo: '/grant.webp',
 } as const;
 
 export const socials: Link[] = [
