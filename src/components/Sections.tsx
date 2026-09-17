@@ -31,7 +31,6 @@ export function Landing() {
             </p>
 
             <h1>{profile.name}</h1>
-            <p className="landing__role">{profile.role}</p>
 
             <p className="landing__intro">{profile.intro}</p>
             <p className="landing__intro landing__intro--sub">{profile.intro2}</p>

@@ -2,17 +2,17 @@ import type { Link } from './projects';
 
 export const profile = {
   name: 'Grant Watson',
-  role: 'Software Engineer',
   /**
-   * The landing gets two plain sentences and nothing else. What a hiring
-   * manager needs in the first ten seconds lives here; the rest is one scroll
-   * away.
+   * Greeting, name, what I do, range, then a line that is not about work.
+   * That is the shape every working engineer's portfolio uses, and it is the
+   * shape I wrote for myself the first time round. It carries the job title,
+   * so the name above is not followed by a subtitle repeating it.
    */
   intro:
-    'I build full-stack web apps and the APIs behind them. React and TypeScript on the front, Node and Postgres underneath, deployed through CI to Cloudflare and Supabase.',
+    'I’m Grant, a software engineer who likes turning ideas into things people actually use. I build across the stack and beyond the web, from React frontends and Node APIs to Python data tools, networking projects, and algorithms written from scratch.',
   intro2:
-    'I led a thirty-person team through a real client build, shipped features into a platform that is live today, and automated a workflow at my job that used to be done by hand.',
-  seeking: 'Open to full-stack, backend, or frontend roles. Remote or relocation both work.',
+    'I care about shipping things that hold up, and I’m always picking up something I haven’t used before. Outside of work I read, game, and spend time with my wife.',
+  seeking: 'Open to software engineering roles of most kinds. Backend, full-stack, data, or platform. Remote or relocation both work.',
   location: 'Bowling Green, KY',
   email: 'tnargw@gmail.com',
   phone: '(859) 488-1103',
@@ -27,14 +27,14 @@ export const socials: Link[] = [
 
 /** The short version of the stack, for the landing. */
 export const headlineStack = [
+  'Python',
   'TypeScript',
+  'C#',
+  'JavaScript',
+  'SQL',
   'React',
   'Node.js',
-  'Python',
   'PostgreSQL',
-  'Supabase',
-  'Cloudflare Workers',
-  'SQL',
 ];
 
 /** Three facts, plainly stated. All of it is checkable further down. */
@@ -48,39 +48,42 @@ export const skills: { group: string; items: { name: string; where: string }[] }
   {
     group: 'Languages',
     items: [
+      { name: 'Python', where: 'Automation pipeline, concurrency coursework, networking' },
       { name: 'TypeScript', where: 'trauma.repair, this site' },
-      { name: 'JavaScript', where: 'SteamLocked Worker, scheduling system API' },
-      { name: 'Python', where: 'Automation pipeline, data analysis' },
-      { name: 'SQL', where: 'RLS policies, schema design, migrations' },
       { name: 'C#', where: 'AlgorithmLib, .NET coursework' },
+      { name: 'JavaScript', where: 'SteamLocked Worker, scheduling system API' },
+      { name: 'SQL', where: 'RLS policies, schema design, migrations' },
+      { name: 'C++', where: 'Budgeting calculator' },
     ],
   },
   {
-    group: 'Frontend',
+    group: 'Computer science',
+    items: [
+      { name: 'Algorithms', where: '13 written from scratch, 61 unit tests' },
+      { name: 'Data structures', where: 'Binary heap, graphs, trees, from scratch' },
+      { name: 'Concurrency', where: 'Threads, locks, and multiprocessing in Python' },
+      { name: 'Parallel computing', where: 'Massively Parallel Computation coursework' },
+      { name: 'Networking', where: 'Peer-to-peer game state sync over TCP' },
+      { name: 'Cryptography', where: 'HMAC-SHA256 session tokens via WebCrypto' },
+    ],
+  },
+  {
+    group: 'Services & data',
+    items: [
+      { name: 'REST API design', where: 'Documented with OpenAPI' },
+      { name: 'OAuth2 / OpenID', where: 'QuickBooks, Zoho Mail, Steam sign-in from spec' },
+      { name: 'PostgreSQL', where: 'On Supabase, with row-level security' },
+      { name: 'Node.js / Express', where: 'Scheduling system API' },
+      { name: 'Cloudflare Workers', where: 'SteamLocked API at the edge' },
+      { name: 'ETL', where: 'PDF parsing to typed models to two external APIs' },
+    ],
+  },
+  {
+    group: 'Interfaces & delivery',
     items: [
       { name: 'React 19', where: 'trauma.repair, this site' },
-      { name: 'React Router', where: 'trauma.repair' },
-      { name: 'Tailwind CSS', where: 'trauma.repair' },
-      { name: 'Vite', where: 'Everything I build now' },
       { name: 'Accessibility', where: 'Keyboard nav, focus, WCAG AA contrast' },
-    ],
-  },
-  {
-    group: 'Backend & data',
-    items: [
-      { name: 'Node.js / Express', where: 'Scheduling system API' },
-      { name: 'PostgreSQL', where: 'On Supabase, with row-level security' },
-      { name: 'Supabase', where: 'Auth, Postgres, migrations, local Docker stack' },
-      { name: 'Cloudflare Workers', where: 'SteamLocked API' },
-      { name: 'REST API design', where: 'Documented with OpenAPI' },
-      { name: 'OAuth2 / OpenID', where: 'QuickBooks, Zoho Mail, Steam sign-in' },
-    ],
-  },
-  {
-    group: 'Testing & delivery',
-    items: [
-      { name: 'Vitest', where: '145 tests across 9 files on SteamLocked' },
-      { name: 'pytest', where: 'Generated-fixture tests on the pipeline' },
+      { name: 'Vitest / pytest', where: '145 tests on SteamLocked, fixtures on the pipeline' },
       { name: 'GitHub Actions', where: 'CI and path-filtered deploys' },
       { name: 'Git', where: 'Branch per issue, protected main, review required' },
     ],

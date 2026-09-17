@@ -182,21 +182,20 @@ export const projects: Project[] = [
 
 export const smallerProjects: { name: string; blurb: string; href?: string }[] = [
   {
-    name: 'SpecGen',
-    blurb:
-      'Takes a feature description in plain English and turns it into Gherkin scenarios covering the happy path, edge cases, and error states. Most of the work is in the system prompt. It catches things the input never mentioned, like sending a generic confirmation for an unregistered password-reset email so the form cannot be used to find out who has an account.',
-    href: 'https://github.com/Tnargw/specgen',
-  },
-  {
     name: 'AlgorithmLib',
     blurb:
       'Thirteen algorithms written from scratch in C# with 61 unit tests behind them. Dijkstra, Bellman-Ford, DAG shortest path, a binary heap, merge sort, quicksort, binary search, Huffman coding, convex hull, string matching, and RSA. I kept it because it is the answer when someone asks whether I can write this stuff without a library.',
   },
   {
-    name: 'Storyium',
+    name: 'Concurrency coursework',
     blurb:
-      'A book recommendation and reading tracker. It pulls subjects out of OpenLibrary for books you already like, asks Google Books for similar ones, and tracks how far through you are.',
-    href: 'https://storyium.netlify.app',
+      'Threads, locks, and multiprocessing in Python, including a threaded server. The part that stuck with me was how much of concurrency is about not sharing state in the first place, rather than about locking it correctly once you do.',
+  },
+  {
+    name: 'SpecGen',
+    blurb:
+      'Takes a feature description in plain English and turns it into Gherkin scenarios covering the happy path, edge cases, and error states. Most of the work is in the system prompt. It catches things the input never mentioned, like sending a generic confirmation for an unregistered password-reset email so the form cannot be used to find out who has an account.',
+    href: 'https://github.com/Tnargw/specgen',
   },
   {
     name: 'Peer-to-peer Pong',
@@ -209,5 +208,11 @@ export const smallerProjects: { name: string; blurb: string; href?: string }[] =
     blurb:
       'Pulls historical snowfall from the Open-Meteo API, finds nearby cities with Geonames, and renders it as an interactive Folium heatmap you can open in a browser.',
     href: 'https://github.com/Tnargw/Snowfall-DataAnalysis',
+  },
+  {
+    name: 'Storyium',
+    blurb:
+      'A book recommendation and reading tracker. It pulls subjects out of OpenLibrary for books you already like, asks Google Books for similar ones, and tracks how far through you are.',
+    href: 'https://storyium.netlify.app',
   },
 ];

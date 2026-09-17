@@ -3,7 +3,16 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
 import { projects, smallerProjects } from '../content/projects';
-import { education, howIWork, jobs, profile, quickFacts, skills, socials } from '../content/profile';
+import {
+  education,
+  headlineStack,
+  howIWork,
+  jobs,
+  profile,
+  quickFacts,
+  skills,
+  socials,
+} from '../content/profile';
 import { SECTIONS } from '../components/Header';
 
 describe('content', () => {
@@ -82,16 +91,18 @@ describe('content', () => {
       expect(migrationLine).toMatch(/seven of/i);
     });
 
-    it('links every smaller project except the one that is coursework', () => {
-      const unlinked = smallerProjects.filter((p) => !p.href);
-      expect(unlinked.map((p) => p.name)).toEqual(['AlgorithmLib']);
+    it('links every smaller project except the coursework ones', () => {
+      // Coursework lives on disk, not GitHub. Anything else without a link is
+      // a claim nobody can check.
+      const unlinked = smallerProjects.filter((p) => !p.href).map((p) => p.name);
+      expect(unlinked).toEqual(['AlgorithmLib', 'Concurrency coursework']);
     });
 
     it('keeps the smaller-project list to work worth showing', () => {
       // A tutorial-tier clone drags the average down on a page whose other
       // entries are a production platform and an edge API.
       expect(smallerProjects.map((p) => p.name)).not.toContain('Hoppy Frog');
-      expect(smallerProjects.length).toBeLessThanOrEqual(5);
+      expect(smallerProjects.length).toBeLessThanOrEqual(6);
     });
   });
 
@@ -106,6 +117,48 @@ describe('content', () => {
   it('leads on capability rather than on the degree', () => {
     expect(profile.intro.toLowerCase()).not.toContain('degree');
     expect(profile.intro.toLowerCase()).not.toContain('graduat');
+  });
+
+  it('does not position me as a web developer only', () => {
+    const groups = skills.map((g) => g.group.toLowerCase());
+    // A frontend/backend split reads as "web dev" whatever is listed inside it.
+    expect(groups).not.toContain('frontend');
+    expect(groups).toContain('computer science');
+
+    const named = skills.flatMap((g) => g.items.map((i) => i.name));
+    for (const nonWeb of ['Python', 'C#', 'Algorithms', 'Concurrency', 'Networking']) {
+      expect(named, `${nonWeb} should be on the page`).toContain(nonWeb);
+    }
+    // The intro is disposition, not a stack list, so breadth has to show in
+    // the row of tags sitting right under it on the landing.
+    for (const lang of ['Python', 'C#', 'SQL']) {
+      expect(headlineStack, `${lang} should be on the landing`).toContain(lang);
+    }
+    expect(headlineStack.indexOf('React')).toBeGreaterThan(headlineStack.indexOf('Python'));
+  });
+
+  it('opens the way a portfolio does, with a name and a person behind it', () => {
+    expect(profile.intro).toMatch(/^I’m Grant/);
+    // A line that is not about work. Every portfolio I looked at has one.
+    expect(profile.intro2).toMatch(/Outside of work/);
+  });
+
+  it('shows rather than claims the soft traits', () => {
+    // Every junior resume says these. Recruiters read them as filler, so the
+    // page has to demonstrate the trait instead of asserting it.
+    const landingCopy = [profile.intro, profile.intro2, profile.seeking].join(' ').toLowerCase();
+    for (const cliche of ['passionate', 'self-starter', 'team player', 'hard worker', 'detail-oriented', 'fast learner', 'lifelong learning']) {
+      expect(landingCopy, `"${cliche}" is filler`).not.toContain(cliche);
+    }
+    // The learning claim has to describe a habit, not assert a trait.
+    expect(profile.intro2).toMatch(/picking up something/);
+  });
+
+  it('claims no language I cannot show code for', () => {
+    // Every .java file on this machine belongs to a vendored IDE, so Java is
+    // not mine to claim.
+    const named = skills.flatMap((g) => g.items.map((i) => i.name));
+    expect(named).not.toContain('Java');
   });
 
   it('keeps the landing to three quick facts', () => {
@@ -169,8 +222,9 @@ describe('App', () => {
   });
 
   it('states availability where a recruiter sees it first', () => {
-    render(<App />);
-    expect(screen.getByText(/open to software engineering roles/i)).toBeInTheDocument();
+    const { container } = render(<App />);
+    const badge = container.querySelector('.landing__status');
+    expect(badge?.textContent).toMatch(/open to software engineering roles/i);
   });
 
   it('keeps the landing short — no projects or skills grid above the fold', () => {
