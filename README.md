@@ -92,15 +92,38 @@ the only element wider than the viewport is a code sample inside its own
 
 ## Deploying
 
-Pushes to `main` build and publish to Cloudflare Pages via
-`.github/workflows/deploy.yml`, behind the same typecheck/test/build gate as CI.
+Connected to Cloudflare Pages through its GitHub integration: every push to
+`main` is built and published, and every other branch gets its own preview URL.
+Cloudflare runs the build itself, so there are no API tokens or repository
+secrets to manage.
 
-One-time setup:
+| Setting             | Value           |
+| ------------------- | --------------- |
+| Build command       | `npm run build` |
+| Build output        | `dist`          |
+| Node version        | 22              |
 
-1. Create a Cloudflare Pages project named `grant-watson-portfolio`.
-2. Add repository secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`.
-3. Update the canonical URL, `og:url`, and `og:image` in `index.html` to the
-   real domain.
+`.github/workflows/ci.yml` runs typecheck, lint, tests and a build on every
+push and pull request, independently of the deploy.
 
-All three versions use different `localStorage` theme keys, so hosting more than
-one does not make them fight over a single setting.
+Live at <https://grant-watson-portfolio.pages.dev>.
+
+### Moving to a custom domain
+
+Add it in the Pages project under **Custom domains**, then update the four
+places the site's own address is written: the canonical link, `og:url` and
+`og:image` in `index.html`, the `Sitemap:` line in `public/robots.txt`, and
+`<loc>` in `public/sitemap.xml`. `src/test/site-urls.test.ts` fails if any of
+them disagree, so a half-finished move is caught by the test suite.
+
+### If you want deploys gated on tests
+
+Cloudflare's integration publishes whether or not the tests pass. To block a
+failing build from going live instead, deploy from GitHub Actions with
+`cloudflare/wrangler-action` (`pages deploy dist --project-name=...`) after the
+test step, add `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` as repository
+secrets, and turn off the Git integration in the Pages project so the two do
+not race.
+
+`public/_headers` carries the security headers and the immutable cache policy
+for Vite's fingerprinted assets.
