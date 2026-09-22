@@ -40,7 +40,7 @@ export const headlineStack = [
 /** Three facts, plainly stated. All of it is checkable further down. */
 export const quickFacts: { label: string; value: string }[] = [
   { label: 'Degree', value: 'B.S. Computer Science, 4.0 GPA' },
-  { label: 'Shipped', value: '4 projects end to end' },
+  { label: 'In production', value: '3 of 4 projects live' },
   { label: 'Based in', value: 'Bowling Green, KY' },
 ];
 

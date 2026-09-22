@@ -31,13 +31,14 @@ export const projects: Project[] = [
     name: 'Employee Scheduling & Time-Tracking System',
     context: 'BYU–Idaho Rec Services · Software Engineer and Project Lead',
     period: 'Sept 2024 – July 2025',
-    scale: 'Team of 30+ across frontend, backend, and database',
+    scale: 'Live in production · team of 30+ · three sub-teams',
     summary:
-      'A scheduling, shift-swap, and time-clock app built to replace Sling, the commercial tool the department was paying for.',
+      'A scheduling, shift-swap, and time-clock app built to replace Sling, the commercial tool the department was paying for. It is live at Rec Services now, built out by later cohorts on the foundation my phase laid.',
     detail: [
       'Rec Services runs a lot of student employees across several campus facilities. Shifts, swaps, time-off, clock-ins, and payroll export all went through Sling, which the department rented and could not change. They wanted their own version that fit how they actually work and met the university security rules.',
       'I was the project lead. That meant doing the requirements work with the customer, deciding the architecture, and keeping a team of thirty-plus student developers moving across three sub-teams. The roster turned over every semester.',
-      'This is an ongoing project, not a one-semester deliverable. Each group of students hands it to the next, and Rec Services is still on Sling while it gets built out. So what I was really responsible for was leaving it in a state the next team could pick up. A scoped backlog, an API they could build against, and a schema that would not need to be torn up.',
+      'This was never a one-semester deliverable. Each group of students hands it to the next, so what I was really responsible for was leaving it in a state the next team could pick up. A scoped backlog, an API they could build against, and a schema that would not need to be torn up.',
+      'That is the part I am proudest of, because it held. Rec Services is off Sling and running on the system now. Later cohorts built it out after I handed over, on the schema, the API contract, and the six-feature MVP line I drew. The department owns the code and keeps it private, so there is nothing here to link to — what I can offer instead is the people who supervised it.',
     ],
     built: [
       'API features for login, shift management, and saving data, built against an OpenAPI spec so the frontend team did not have to read backend source to know what they were calling.',
