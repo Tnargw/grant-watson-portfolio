@@ -59,8 +59,8 @@ export const skills: { group: string; items: { name: string; where: string }[] }
   {
     group: 'Computer science',
     items: [
-      { name: 'Algorithms', where: '13 written from scratch, 61 unit tests' },
-      { name: 'Data structures', where: 'Binary heap, graphs, trees, from scratch' },
+      { name: 'Algorithms', where: 'Eleven implemented in C# against a 61-test NUnit spec' },
+      { name: 'Data structures', where: 'Linked list, binary search tree, Huffman tree, from scratch' },
       { name: 'Concurrency', where: 'Threads, locks, and multiprocessing in Python' },
       { name: 'Parallel computing', where: 'Massively Parallel Computation coursework' },
       { name: 'Networking', where: 'Peer-to-peer game state sync over TCP' },

@@ -184,7 +184,7 @@ export const smallerProjects: { name: string; blurb: string; href?: string }[] =
   {
     name: 'AlgorithmLib',
     blurb:
-      'Thirteen algorithms written from scratch in C# with 61 unit tests behind them. Dijkstra, Bellman-Ford, DAG shortest path, a binary heap, merge sort, quicksort, binary search, Huffman coding, convex hull, string matching, and RSA. I kept it because it is the answer when someone asks whether I can write this stuff without a library.',
+      'Coursework for CSE 381. Eleven algorithms implemented in C# against a provided 61-test NUnit specification: Dijkstra, Bellman-Ford, DAG shortest path, merge sort, quicksort, binary search, linear search, Huffman coding, convex hull, string matching, and RSA. The graph and priority queue types were given; the algorithms are mine. It is not public, because BYU-Idaho’s honor code prohibits posting completed assignment files, but I am happy to walk through any of them.',
   },
   {
     name: 'Concurrency coursework',
