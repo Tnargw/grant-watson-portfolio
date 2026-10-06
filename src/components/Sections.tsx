@@ -28,86 +28,111 @@ export function Work() {
   return (
     <section className="section section--flush" id="work" aria-label="Projects">
       <div className="shell">
-        {projects.map((project) => (
-          <article className="project" id={project.id} key={project.id}>
-            <header className="project__head">
-              <p className="project__meta">
-                <strong>{project.context}</strong>
-                <span>{project.period}</span>
-              </p>
+        {projects.map((project) => {
+          /* The running thing goes next to the title. Source and anything
+             else is reference material and stays in the sidebar. */
+          const live = project.links.find((link) => link.live);
+          const otherLinks = project.links.filter((link) => !link.live);
 
-              <h3>{project.name}</h3>
-              <p className="project__summary">{project.summary}</p>
-              <p className="project__scale">{project.scale}</p>
-            </header>
+          return (
+            <article className="project" id={project.id} key={project.id}>
+              <header className="project__head">
+                <p className="project__meta">
+                  <strong>{project.context}</strong>
+                  <span>{project.period}</span>
+                </p>
 
-            <div className="project__body">
-              <div className="project__main">
-                {project.detail.map((paragraph) => (
-                  <p key={paragraph.slice(0, 40)}>{paragraph}</p>
-                ))}
+                <h3>{project.name}</h3>
+                <p className="project__summary">{project.summary}</p>
 
-                <div style={{ marginTop: '1.75rem' }}>
-                  <h4 className="block-title">What I built</h4>
-                  <ul className="did-list">
-                    {project.built.map((item) => (
-                      <li key={item.slice(0, 40)}>{item}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
+                {/* Rendered once, placed twice: beside the title on a wide
+                    screen, below the summary once the header collapses to one
+                    column. DOM order is what narrow screens follow. */}
+                {live && (
+                  <a
+                    className="btn btn--primary project__live"
+                    href={live.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {live.label}
+                    <span className="btn__hint" aria-hidden="true">
+                      ↗
+                    </span>
+                  </a>
+                )}
 
-              <aside className="project__aside">
-                {project.diagram && <Diagram id={project.diagram} />}
+                <p className="project__scale">{project.scale}</p>
+              </header>
 
-                <div>
-                  <h4 className="block-title">Stack</h4>
-                  <ul className="tag-row">
-                    {project.stack.map((tech) => (
-                      <li className="tag" key={tech}>
-                        {tech}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+              <div className="project__body">
+                <div className="project__main">
+                  {project.detail.map((paragraph) => (
+                    <p key={paragraph.slice(0, 40)}>{paragraph}</p>
+                  ))}
 
-                {project.links.length > 0 && (
-                  <div className="btn-row">
-                    {project.links.map((link) => (
-                      <a
-                        key={link.href}
-                        className="btn"
-                        href={link.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {link.label}
-                        <span className="btn__hint">{link.hint}</span>
-                      </a>
-                    ))}
+                  <div style={{ marginTop: '1.75rem' }}>
+                    <h4 className="block-title">What I built</h4>
+                    <ul className="did-list">
+                      {project.built.map((item) => (
+                        <li key={item.slice(0, 40)}>{item}</li>
+                      ))}
+                    </ul>
                   </div>
-                )}
-              </aside>
-            </div>
+                </div>
 
-            <div className="hard">
-              <div className="hard__head">
-                <span className="hard__tag">The hard part</span>
-                <h4>{project.hardPart.title}</h4>
+                <aside className="project__aside">
+                  {project.diagram && <Diagram id={project.diagram} />}
+
+                  <div>
+                    <h4 className="block-title">Stack</h4>
+                    <ul className="tag-row">
+                      {project.stack.map((tech) => (
+                        <li className="tag" key={tech}>
+                          {tech}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {otherLinks.length > 0 && (
+                    <div className="btn-row">
+                      {otherLinks.map((link) => (
+                        <a
+                          key={link.href}
+                          className="btn"
+                          href={link.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {link.label}
+                          <span className="btn__hint">{link.hint}</span>
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </aside>
               </div>
-              <div className="hard__body">
-                <p>{project.hardPart.body}</p>
-                {project.hardPart.code && (
-                  <CodeBlock
-                    language={project.hardPart.code.language}
-                    caption={project.hardPart.code.caption}
-                    source={project.hardPart.code.source}
-                  />
-                )}
+
+              <div className="hard">
+                <div className="hard__head">
+                  <span className="hard__tag">The hard part</span>
+                  <h4>{project.hardPart.title}</h4>
+                </div>
+                <div className="hard__body">
+                  <p>{project.hardPart.body}</p>
+                  {project.hardPart.code && (
+                    <CodeBlock
+                      language={project.hardPart.code.language}
+                      caption={project.hardPart.code.caption}
+                      source={project.hardPart.code.source}
+                    />
+                  )}
+                </div>
               </div>
-            </div>
-          </article>
-        ))}
+            </article>
+          );
+        })}
       </div>
     </section>
   );

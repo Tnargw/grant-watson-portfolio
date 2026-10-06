@@ -1,6 +1,7 @@
 import type { DiagramId } from '../components/Diagrams';
 
-export type Link = { label: string; href: string; hint?: string };
+/** `live` marks the running thing, as opposed to the source. */
+export type Link = { label: string; href: string; hint?: string; live?: boolean };
 
 export type Project = {
   id: string;
@@ -112,7 +113,9 @@ export const projects: Project[] = [
       'Row-Level Security',
       'Cloudflare Pages',
     ],
-    links: [{ label: 'Visit the site', href: 'https://trauma.repair', hint: 'trauma.repair' }],
+    links: [
+      { label: 'Visit the site', href: 'https://trauma.repair', hint: 'trauma.repair', live: true },
+    ],
     diagram: 'trauma',
   },
   {
@@ -148,6 +151,14 @@ export const projects: Project[] = [
       'GitHub Actions',
     ],
     links: [
+      // Live first. Someone who can click through and watch real Steam data
+      // load is more convinced than someone who reads the source.
+      {
+        label: 'Visit the site',
+        href: 'https://tnargw.github.io/SteamLocked/',
+        hint: 'tnargw.github.io',
+        live: true,
+      },
       { label: 'Code', href: 'https://github.com/Tnargw/SteamLocked', hint: 'github.com/Tnargw' },
     ],
     diagram: 'steamlocked',

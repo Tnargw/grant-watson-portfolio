@@ -635,6 +635,56 @@ ol {
 
 .project__head {
   margin-bottom: 1.75rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 1.5rem;
+  align-items: start;
+}
+
+.project__head > * {
+  grid-column: 1 / -1;
+}
+
+/*
+ * Wide enough for a button beside the heading: pull it onto the title's row,
+ * hard right. Narrower than that, every child keeps its DOM order, which puts
+ * the button under the summary where there is room for it.
+ */
+@media (min-width: 720px) {
+  /* The button is taller than one line of the heading, so both are centred in
+     the row rather than hung from its top. That lines the button's label up
+     with the title text instead of sitting low against it. */
+  .project__head h3 {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: center;
+    margin-bottom: 0;
+  }
+
+  .project__live {
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: end;
+    align-self: center;
+    margin-block: 0;
+  }
+
+  /* The heading's own bottom margin moved to the row, so the summary still
+     clears a button that is taller than the text beside it. */
+  .project__head > .project__summary {
+    margin-top: 0.6rem;
+  }
+}
+
+.project__live {
+  justify-self: start;
+  /* Stacked layout: the scale pill follows immediately, and the two read as
+     one clump without a clear gap between them. */
+  margin-block: 0.5rem 1.15rem;
+}
+
+.project__live .btn__hint {
+  font-size: 0.9em;
 }
 
 .project__meta {
