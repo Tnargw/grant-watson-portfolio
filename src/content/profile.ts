@@ -142,7 +142,7 @@ export const jobs: {
   {
     role: 'Data Operations & Process Automation',
     org: 'Bedrock Investment Property',
-    period: 'Jun 2026 – Present',
+    period: 'Jan 2026 – Present',
     location: 'Remote',
     points: [
       'Noticed owner statements were being processed entirely by hand, asked to automate it, and built the Python pipeline described above. It runs end to end on generated fixtures and has not been cut over to the live accounts yet.',
